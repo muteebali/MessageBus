@@ -1,6 +1,7 @@
 using MassTransient.InMemory;
 using MassTransient.InMemory.Consumer;
 using MassTransit;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.SetKebabCaseEndpointNameFormatter();
-    busConfigurator.AddConsumer<CurrentTimeConsumer>();
+    busConfigurator.AddConsumers(typeof(Program).Assembly);
+
     busConfigurator.UsingInMemory((context, config) =>
     {
         config.ConfigureEndpoints(context);
